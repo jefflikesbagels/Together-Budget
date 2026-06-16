@@ -1,0 +1,132 @@
+{
+  "partnerAName": "Alex",
+  "partnerBName": "Jordan",
+  "partnerAIncome": [
+    {
+      "id": "sample-income-a-1",
+      "label": "Salary (take-home)",
+      "amount": 5200
+    },
+    {
+      "id": "sample-income-a-2",
+      "label": "Side income",
+      "amount": 300
+    }
+  ],
+  "partnerBIncome": [
+    {
+      "id": "sample-income-b-1",
+      "label": "Salary (take-home)",
+      "amount": 4100
+    }
+  ],
+  "needs": [
+    {
+      "id": "sample-needs-1",
+      "label": "Rent / mortgage",
+      "amount": 2200,
+      "paidBy": "combined"
+    },
+    {
+      "id": "sample-needs-2",
+      "label": "Utilities",
+      "amount": 280,
+      "paidBy": "combined"
+    },
+    {
+      "id": "sample-needs-3",
+      "label": "Groceries",
+      "amount": 750,
+      "paidBy": "combined"
+    },
+    {
+      "id": "sample-needs-4",
+      "label": "Car payment",
+      "amount": 420,
+      "paidBy": "his"
+    },
+    {
+      "id": "sample-needs-5",
+      "label": "Insurance (health + auto)",
+      "amount": 450,
+      "paidBy": "combined"
+    },
+    {
+      "id": "sample-needs-6",
+      "label": "Phone & internet",
+      "amount": 180,
+      "paidBy": "hers"
+    }
+  ],
+  "wants": [
+    {
+      "id": "sample-wants-1",
+      "label": "Dining out",
+      "amount": 400,
+      "paidBy": "combined"
+    },
+    {
+      "id": "sample-wants-2",
+      "label": "Streaming & subscriptions",
+      "amount": 85,
+      "paidBy": "combined"
+    },
+    {
+      "id": "sample-wants-3",
+      "label": "Hobbies / personal",
+      "amount": 200,
+      "paidBy": "his"
+    },
+    {
+      "id": "sample-wants-4",
+      "label": "Hobbies / personal",
+      "amount": 150,
+      "paidBy": "hers"
+    },
+    {
+      "id": "sample-wants-5",
+      "label": "Date night / entertainment",
+      "amount": 250,
+      "paidBy": "combined"
+    }
+  ],
+  "savings": [
+    {
+      "id": "sample-savings-1",
+      "label": "Emergency fund",
+      "amount": 600,
+      "paidBy": "combined"
+    },
+    {
+      "id": "sample-savings-2",
+      "label": "Retirement (401k extra)",
+      "amount": 500,
+      "paidBy": "his"
+    },
+    {
+      "id": "sample-savings-3",
+      "label": "Retirement (401k extra)",
+      "amount": 400,
+      "paidBy": "hers"
+    },
+    {
+      "id": "sample-savings-4",
+      "label": "Vacation fund",
+      "amount": 200,
+      "paidBy": "combined"
+    }
+  ],
+  "misc": [
+    {
+      "id": "sample-misc-1",
+      "label": "Car maintenance sinking fund",
+      "amount": 150
+    },
+    {
+      "id": "sample-misc-2",
+      "label": "Gifts & holidays",
+      "amount": 100
+    }
+  ],
+  "period": "monthly"
+}

@@ -1,0 +1,86 @@
+{
+  "partnerAName": "His",
+  "partnerBName": "Hers",
+  "partnerAIncome": [
+    {
+      "id": "d783f97f-8bb3-4134-9781-f38c005f430f",
+      "label": "Salary",
+      "amount": 7682.99
+    }
+  ],
+  "partnerBIncome": [
+    {
+      "id": "80e321f5-ea1c-4949-a00c-00ae4bdd1e55",
+      "label": "Salary",
+      "amount": 5590
+    }
+  ],
+  "needs": [
+    {
+      "id": "351a2685-0d2a-4ed9-825e-dced9a0e831d",
+      "label": "Mortgage",
+      "amount": 2038,
+      "paidBy": "his"
+    },
+    {
+      "id": "b5100725-350a-41a9-9d91-fb01c437de4e",
+      "label": "Mortgage",
+      "amount": 1554,
+      "paidBy": "hers"
+    },
+    {
+      "id": "0a9203a5-8afa-442a-8713-73a0cfc25eec",
+      "label": "Utilities",
+      "amount": 500,
+      "paidBy": "his"
+    },
+    {
+      "id": "611fa0f3-017b-4c95-8480-976b73194a7a",
+      "label": "Utilities",
+      "amount": 500,
+      "paidBy": "hers"
+    },
+    {
+      "id": "768437b4-b372-43d4-9abb-205bf0e31e8e",
+      "label": "Car Insurance",
+      "amount": 400,
+      "paidBy": "his"
+    },
+    {
+      "id": "9900d98b-1741-470c-a167-8267adf408c8",
+      "label": "Car Insurance",
+      "amount": 100,
+      "paidBy": "hers"
+    }
+  ],
+  "wants": [
+    {
+      "id": "b533e5cb-cc5b-451b-bfdc-b86914e191c9",
+      "label": "Credit Card",
+      "amount": 2700,
+      "paidBy": "his"
+    },
+    {
+      "id": "614ff246-238f-45f4-a8dc-08bcd1b40ad5",
+      "label": "Credit Card",
+      "amount": 2000,
+      "paidBy": "hers"
+    }
+  ],
+  "savings": [
+    {
+      "id": "01d7b001-bf59-4d9e-91ee-d9ce93c298b1",
+      "label": "Primary Savings",
+      "amount": 2000,
+      "paidBy": "his"
+    },
+    {
+      "id": "8d8741c9-652e-46a6-8b2c-252fc4ebbe40",
+      "label": "Savings",
+      "amount": 1000.01,
+      "paidBy": "hers"
+    }
+  ],
+  "misc": [],
+  "period": "monthly"
+}

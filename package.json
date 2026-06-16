@@ -1,0 +1,9 @@
+{
+  "name": "together-budget",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Couples budgeting app with shared server storage",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

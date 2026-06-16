@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Together Budget — Couples 50/30/20 Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="header__brand">
+          <span class="header__logo" aria-hidden="true">◈</span>
+          <div>
+            <h1>Together Budget</h1>
+            <p class="header__tagline">His &amp; hers income · expenses · 50/30/20</p>
+          </div>
+        </div>
+        <div class="header__actions">
+          <label class="period-toggle" title="Budget period">
+            <span>Period</span>
+            <select id="period" aria-label="Budget period">
+              <option value="monthly" selected>Monthly</option>
+              <option value="biweekly">Bi-weekly</option>
+              <option value="weekly">Weekly</option>
+            </select>
+          </label>
+          <button type="button" class="btn btn--ghost" id="importBtn" title="Import a JSON backup">
+            Import
+          </button>
+          <input type="file" id="importFile" accept=".json,application/json" hidden />
+          <button type="button" class="btn btn--ghost" id="resetBtn" title="Reset all data">
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <main class="main">
+        <!-- Partner income -->
+        <section class="panel partners" aria-labelledby="partners-heading">
+          <div class="panel__head">
+            <h2 id="partners-heading">Income by partner</h2>
+            <p class="panel__sub">Enter take-home pay and any side income for each of you.</p>
+          </div>
+          <div class="partners__grid" id="partnersGrid"></div>
+        </section>
+
+        <!-- Combined summary -->
+        <section class="panel summary" aria-labelledby="summary-heading">
+          <h2 id="summary-heading" class="visually-hidden">Budget summary</h2>
+          <div class="summary__hero">
+            <article class="stat-card stat-card--income">
+              <span class="stat-card__label">Combined income</span>
+              <span class="stat-card__value" id="combinedIncome">$0</span>
+            </article>
+            <article class="stat-card stat-card--spent">
+              <span class="stat-card__label">Total allocated</span>
+              <span class="stat-card__value" id="totalAllocated">$0</span>
+            </article>
+            <article class="stat-card stat-card--disposable">
+              <span class="stat-card__label">Disposable left</span>
+              <span class="stat-card__value" id="disposableIncome">$0</span>
+              <span class="stat-card__hint" id="disposableHint">Unassigned cash after your budget</span>
+            </article>
+          </div>
+        </section>
+
+        <!-- 50/30/20 -->
+        <section class="panel rule502030" aria-labelledby="rule-heading">
+          <div class="panel__head">
+            <h2 id="rule-heading">50 / 30 / 20 rule</h2>
+            <p class="panel__sub">
+              <strong>50%</strong> needs · <strong>30%</strong> wants · <strong>20%</strong> savings — compared to your combined income.
+            </p>
+          </div>
+          <div class="rule__layout">
+            <div class="rule__chart-wrap">
+              <div class="donut" id="donutChart" role="img" aria-label="Budget allocation chart"></div>
+              <ul class="donut-legend" id="donutLegend"></ul>
+            </div>
+            <div class="rule__bars" id="ruleBars"></div>
+          </div>
+        </section>
+
+        <!-- Expenses -->
+        <section class="panel expenses" aria-labelledby="expenses-heading">
+          <div class="panel__head">
+            <h2 id="expenses-heading">Expenses</h2>
+            <p class="panel__sub">Group spending into needs, wants, and savings. Tag each line as His, Hers, or Combined.</p>
+          </div>
+          <div class="expenses__grid" id="expensesGrid"></div>
+        </section>
+
+        <!-- Other needs / notes -->
+        <section class="panel misc" aria-labelledby="misc-heading">
+          <div class="panel__head">
+            <h2 id="misc-heading">Other needs &amp; goals</h2>
+            <p class="panel__sub">Irregular bills, sinking funds, or one-off goals — counted toward needs unless you choose otherwise.</p>
+          </div>
+          <div id="miscList" class="misc__list"></div>
+          <button type="button" class="btn btn--add" id="addMiscBtn">+ Add other need</button>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>
+          <span id="saveMode">Shared household budget on server</span>
+          <span class="save-status" id="saveStatus" aria-live="polite"></span>
+          · <kbd>Ctrl</kbd>+<kbd>S</kbd> to export a backup
+        </p>
+      </footer>
+    </div>
+
+    <template id="partnerTemplate">
+      <article class="partner-card" data-partner-id="">
+        <header class="partner-card__head">
+          <input
+            type="text"
+            class="partner-card__name"
+            aria-label="Partner name"
+            maxlength="24"
+          />
+          <span class="partner-card__total" data-total></span>
+        </header>
+        <ul class="line-items" data-items></ul>
+        <button type="button" class="btn btn--add btn--sm">+ Add income</button>
+      </article>
+    </template>
+
+    <template id="lineItemTemplate">
+      <li class="line-item">
+        <input type="text" class="line-item__label" placeholder="e.g. Salary" aria-label="Description" />
+        <div class="line-item__amount-wrap">
+          <span class="line-item__currency">$</span>
+          <input
+            type="number"
+            class="line-item__amount"
+            min="0"
+            step="0.01"
+            placeholder="0"
+            aria-label="Amount"
+          />
+        </div>
+        <button type="button" class="line-item__remove" aria-label="Remove" title="Remove">×</button>
+      </li>
+    </template>
+
+    <template id="expenseLineItemTemplate">
+      <li class="line-item line-item--expense">
+        <input type="text" class="line-item__label" placeholder="e.g. Rent" aria-label="Description" />
+        <select class="line-item__paid-by" aria-label="Paid by">
+          <option value="his">His</option>
+          <option value="hers">Hers</option>
+          <option value="combined" selected>Combined</option>
+        </select>
+        <div class="line-item__amount-wrap">
+          <span class="line-item__currency">$</span>
+          <input
+            type="number"
+            class="line-item__amount"
+            min="0"
+            step="0.01"
+            placeholder="0"
+            aria-label="Amount"
+          />
+        </div>
+        <button type="button" class="line-item__remove" aria-label="Remove" title="Remove">×</button>
+      </li>
+    </template>
+
+    <template id="categoryTemplate">
+      <div class="expense-category" data-category="">
+        <header class="expense-category__head">
+          <h3 class="expense-category__title"></h3>
+          <div class="expense-category__meta">
+            <span class="expense-category__target" data-target></span>
+            <span class="expense-category__actual" data-actual></span>
+          </div>
+          <p class="expense-category__split" data-split hidden></p>
+        </header>
+        <div class="expense-category__progress">
+          <div class="progress-bar">
+            <div class="progress-bar__fill" data-fill></div>
+            <div class="progress-bar__target" data-target-line style="left: 100%"></div>
+          </div>
+        </div>
+        <ul class="line-items" data-items></ul>
+        <button type="button" class="btn btn--add btn--sm">+ Add expense</button>
+      </div>
+    </template>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
