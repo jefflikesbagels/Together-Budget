@@ -14,6 +14,10 @@
  */
 
 /**
+ * @typedef {LineItem & { category: ExpenseCategory }} MiscLineItem
+ */
+
+/**
  * @typedef {Object} BudgetState
  * @property {string} partnerAName
  * @property {string} partnerBName
@@ -22,7 +26,7 @@
  * @property {LineItem[]} needs
  * @property {LineItem[]} wants
  * @property {LineItem[]} savings
- * @property {LineItem[]} misc
+ * @property {MiscLineItem[]} misc
  * @property {'monthly' | 'biweekly' | 'weekly'} period
  */
 
@@ -52,6 +56,11 @@ export function createLineItem(label = '', amount = 0) {
   return { id: uid(), label, amount };
 }
 
+/** @param {ExpenseCategory} [category] */
+export function createMiscItem(label = '', amount = 0, category = 'needs') {
+  return { id: uid(), label, amount, category };
+}
+
 /** @param {ExpensePaidBy} [paidBy] */
 export function createExpenseItem(label = '', amount = 0, paidBy = 'combined') {
   return { id: uid(), label, amount, paidBy };
@@ -63,6 +72,17 @@ export function normalizeExpenseItems(items) {
     ...i,
     paidBy:
       i.paidBy === 'his' || i.paidBy === 'hers' || i.paidBy === 'combined' ? i.paidBy : 'combined',
+  }));
+}
+
+/** @param {LineItem[]} items */
+export function normalizeMiscItems(items) {
+  return items.map((i) => ({
+    ...i,
+    category:
+      i.category === 'needs' || i.category === 'wants' || i.category === 'savings'
+        ? i.category
+        : 'needs',
   }));
 }
 
@@ -104,7 +124,7 @@ export function defaultState() {
       createExpenseItem('Emergency fund', 0, 'combined'),
       createExpenseItem('Retirement', 0, 'combined'),
     ],
-    misc: [createLineItem('Car maintenance fund', 0)],
+    misc: [createMiscItem('Car maintenance fund', 0, 'needs')],
     period: 'monthly',
   };
 }
@@ -117,6 +137,18 @@ export function toMonthly(amount, period) {
 
 export function sumItems(items) {
   return items.reduce((s, i) => s + (Number(i.amount) || 0), 0);
+}
+
+/** @param {MiscLineItem[]} items */
+export function sumMiscByCategory(items) {
+  return items.reduce(
+    (acc, item) => {
+      const category = RULE[item.category] == null ? 'needs' : item.category;
+      acc[category] += Number(item.amount) || 0;
+      return acc;
+    },
+    { needs: 0, wants: 0, savings: 0 }
+  );
 }
 
 /** True if any line item has a non-zero amount. */
@@ -146,10 +178,16 @@ export function calculate(state) {
   const needs = sumItems(state.needs);
   const wants = sumItems(state.wants);
   const savings = sumItems(state.savings);
-  const miscNeeds = sumItems(state.misc);
+  const miscByCategory = sumMiscByCategory(state.misc);
 
-  const totalNeeds = needs + miscNeeds;
-  const totalAllocated = totalNeeds + wants + savings;
+  const actuals = {
+    needs: needs + miscByCategory.needs,
+    wants: wants + miscByCategory.wants,
+    savings: savings + miscByCategory.savings,
+  };
+
+  const totalNeeds = actuals.needs;
+  const totalAllocated = actuals.needs + actuals.wants + actuals.savings;
   const disposable = combinedIncome - totalAllocated;
 
   const targets = {
@@ -158,7 +196,6 @@ export function calculate(state) {
     savings: combinedIncome * RULE.savings,
   };
 
-  const actuals = { needs: totalNeeds, wants, savings };
   const pctOfIncome = (n) => (combinedIncome > 0 ? (n / combinedIncome) * 100 : 0);
 
   const ruleStatus = {
@@ -171,8 +208,8 @@ export function calculate(state) {
     combinedIncome > 0
       ? [
           { key: 'needs', value: totalNeeds, color: 'var(--c-needs)' },
-          { key: 'wants', value: wants, color: 'var(--c-wants)' },
-          { key: 'savings', value: savings, color: 'var(--c-savings)' },
+          { key: 'wants', value: actuals.wants, color: 'var(--c-wants)' },
+          { key: 'savings', value: actuals.savings, color: 'var(--c-savings)' },
           { key: 'free', value: Math.max(0, disposable), color: 'var(--c-free)' },
         ].filter((s) => s.value > 0)
       : [];
@@ -182,9 +219,10 @@ export function calculate(state) {
     incomeB,
     combinedIncome,
     totalNeeds,
-    wants,
-    savings,
-    miscNeeds,
+    wants: actuals.wants,
+    savings: actuals.savings,
+    miscNeeds: miscByCategory.needs,
+    miscByCategory,
     totalAllocated,
     disposable,
     targets,

@@ -3,12 +3,14 @@ import {
   CATEGORY_META,
   createExpenseItem,
   createLineItem,
+  createMiscItem,
   defaultState,
   formatMoney,
   hasBudgetData,
   normalizeExpenseItems,
+  normalizeMiscItems,
   sumByPaidBy,
-} from './budget.js';
+} from './budget.js?v=refiki-general-cleanup';
 import {
   AUTH_KEY,
   captureAuthFromUrl,
@@ -19,7 +21,7 @@ import {
   saveToLocal,
   saveToServer,
   testLocalStorage,
-} from './storage.js';
+} from './storage.js?v=refiki-general-cleanup';
 
 /** @type {import('./budget.js').BudgetState} */
 let state = defaultState();
@@ -45,7 +47,7 @@ function mergeLoadedState(saved) {
     needs: normalizeExpenseItems(Array.isArray(saved.needs) ? saved.needs : base.needs),
     wants: normalizeExpenseItems(Array.isArray(saved.wants) ? saved.wants : base.wants),
     savings: normalizeExpenseItems(Array.isArray(saved.savings) ? saved.savings : base.savings),
-    misc: Array.isArray(saved.misc) ? saved.misc : base.misc,
+    misc: normalizeMiscItems(Array.isArray(saved.misc) ? saved.misc : base.misc),
     period: saved.period ?? base.period,
   };
 }
@@ -352,7 +354,25 @@ function mountMisc() {
 
     const categoryWrap = document.createElement('div');
     categoryWrap.className = 'misc-category';
-    categoryWrap.innerHTML = '<span class="misc-tag">Counts as needs</span>';
+    const category = document.createElement('select');
+    category.className = 'misc-category__select';
+    category.setAttribute('aria-label', 'Budget category');
+    [
+      ['needs', 'Needs'],
+      ['wants', 'Wants'],
+      ['savings', 'Savings'],
+    ].forEach(([value, labelText]) => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = labelText;
+      if (value === item.category) option.selected = true;
+      category.appendChild(option);
+    });
+    category.addEventListener('change', () => {
+      item.category = category.value;
+      onDataChange();
+    });
+    categoryWrap.appendChild(category);
 
     row.appendChild(node);
     row.appendChild(categoryWrap);
@@ -380,7 +400,7 @@ function updateExpenseCategories(calc) {
   $$('[data-category]', $('#expensesGrid')).forEach((block) => {
     const cat = block.dataset.category;
     const target = calc.targets[cat];
-    const actual = cat === 'needs' ? calc.totalNeeds : calc.actuals[cat];
+    const actual = calc.actuals[cat];
     const status = calc.ruleStatus[cat];
     const items = state[cat];
 
@@ -455,7 +475,7 @@ function renderDonut(calc) {
 
   if (calc.donutSegments.length === 0) {
     donut.style.background = 'conic-gradient(var(--surface-3) 0deg 360deg)';
-    legend.innerHTML = '<li class="donut-legend__empty">Add income and expenses to see your split</li>';
+    legend.innerHTML = '';
     return;
   }
 
@@ -533,7 +553,7 @@ $('#period').addEventListener('change', (e) => {
 });
 
 $('#addMiscBtn').addEventListener('click', () => {
-  state.misc.push(createLineItem('', 0));
+  state.misc.push(createMiscItem('', 0, 'needs'));
   saveState();
   mountMisc();
   updateComputed();

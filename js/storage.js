@@ -1,4 +1,4 @@
-import { defaultState } from './budget.js';
+import { defaultState } from './budget.js?v=refiki-general-cleanup';
 
 const STORAGE_KEY = 'together-budget-v1';
 export const AUTH_KEY = 'together-budget-auth';
