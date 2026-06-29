@@ -10,122 +10,261 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styles.css?v=nav-icon-colors-v1" />
   </head>
   <body>
+    <div class="budget-rain" id="budgetRain" aria-hidden="true"></div>
     <div class="app">
-      <header class="header">
-        <div class="header__brand">
-          <span class="header__logo" aria-hidden="true">◈</span>
-          <div>
-            <h1>Together Budget</h1>
-            <p class="header__tagline">His &amp; hers income · expenses · 50/30/20</p>
-          </div>
+      <aside class="sidebar" aria-label="Budget sections">
+        <div class="sidebar__brand">
+          <img
+            class="sidebar__stamp"
+            src="assets/branding/together-budget-stamp.png?v=stamp-noglow-v1"
+            alt="Together Budget"
+          />
         </div>
-        <div class="header__actions">
-          <label class="period-toggle" title="Budget period">
-            <span>Period</span>
-            <select id="period" aria-label="Budget period">
-              <option value="monthly" selected>Monthly</option>
-              <option value="biweekly">Bi-weekly</option>
-              <option value="weekly">Weekly</option>
-            </select>
-          </label>
-          <button type="button" class="btn btn--ghost" id="importBtn" title="Import a JSON backup">
-            Import
+        <nav class="sidebar__nav" aria-label="Main sections">
+          <button type="button" class="sidebar__link is-active" data-view-target="overview" aria-selected="true">
+            <span class="sidebar__icon" aria-hidden="true"></span>
+            Overview
           </button>
-          <input type="file" id="importFile" accept=".json,application/json" hidden />
-          <button type="button" class="btn btn--ghost" id="resetBtn" title="Reset all data">
-            Reset
+          <button type="button" class="sidebar__link" data-view-target="income" aria-selected="false">
+            <span class="sidebar__icon" aria-hidden="true"></span>
+            Income
           </button>
+          <button type="button" class="sidebar__link" data-view-target="expenses" aria-selected="false">
+            <span class="sidebar__icon" aria-hidden="true"></span>
+            Expenses
+          </button>
+          <button type="button" class="sidebar__link" data-view-target="goals" aria-selected="false">
+            <span class="sidebar__icon" aria-hidden="true"></span>
+            Goals
+          </button>
+        </nav>
+        <div class="sidebar__art" aria-hidden="true">
+          <img src="assets/illustrations/sidebar-piggy-bank.png?v=piggy-v1" alt="" />
         </div>
-      </header>
-
-      <main class="main">
-        <!-- Partner income -->
-        <section class="panel partners" aria-labelledby="partners-heading">
-          <div class="panel__head">
-            <h2 id="partners-heading">Income by partner</h2>
-            <p class="panel__sub">Enter take-home pay and any side income for each of you.</p>
-          </div>
-          <div class="partners__grid" id="partnersGrid"></div>
-        </section>
-
-        <!-- Combined summary -->
-        <section class="panel summary" aria-labelledby="summary-heading">
-          <h2 id="summary-heading" class="visually-hidden">Budget summary</h2>
-          <div class="summary__hero">
-            <article class="stat-card stat-card--income">
-              <span class="stat-card__label">Combined income</span>
-              <span class="stat-card__value" id="combinedIncome">$0</span>
-            </article>
-            <article class="stat-card stat-card--spent">
-              <span class="stat-card__label">Total allocated</span>
-              <span class="stat-card__value" id="totalAllocated">$0</span>
-            </article>
-            <article class="stat-card stat-card--disposable">
-              <span class="stat-card__label">Disposable left</span>
-              <span class="stat-card__value" id="disposableIncome">$0</span>
-              <span class="stat-card__hint" id="disposableHint">Unassigned cash after your budget</span>
-            </article>
-          </div>
-        </section>
-
-        <!-- 50/30/20 -->
-        <section class="panel rule502030" aria-labelledby="rule-heading">
-          <div class="panel__head">
-            <h2 id="rule-heading">50 / 30 / 20 rule</h2>
-            <p class="panel__sub">
-              <strong>50%</strong> needs · <strong>30%</strong> wants · <strong>20%</strong> savings — compared to your combined income.
-            </p>
-          </div>
-          <div class="rule__layout">
-            <div class="rule__chart-wrap">
-              <div class="donut" id="donutChart" role="img" aria-label="Budget allocation chart"></div>
-              <ul class="donut-legend" id="donutLegend"></ul>
-            </div>
-            <div class="rule__bars" id="ruleBars"></div>
-          </div>
-        </section>
-
-        <!-- Expenses -->
-        <section class="panel expenses" aria-labelledby="expenses-heading">
-          <div class="panel__head">
-            <h2 id="expenses-heading">Expenses</h2>
-            <p class="panel__sub">Group spending into needs, wants, and savings. Tag each line as His, Hers, or Combined.</p>
-          </div>
-          <div class="expenses__grid" id="expensesGrid"></div>
-        </section>
-
-        <!-- Other needs / notes -->
-        <section class="panel misc" aria-labelledby="misc-heading">
-          <div class="panel__head">
-            <h2 id="misc-heading">Other needs &amp; goals</h2>
-            <p class="panel__sub">Irregular bills, sinking funds, or one-off goals — counted toward needs unless you choose otherwise.</p>
-          </div>
-          <div id="miscList" class="misc__list"></div>
-          <button type="button" class="btn btn--add" id="addMiscBtn">+ Add other need</button>
-        </section>
-      </main>
-
-      <footer class="footer">
-        <p>
-          <span id="saveMode">Shared household budget on server</span>
+        <div class="sidebar__foot">
+          <span id="saveMode">Saved locally in this browser</span>
           <span class="save-status" id="saveStatus" aria-live="polite"></span>
-          · <kbd>Ctrl</kbd>+<kbd>S</kbd> to export a backup
-        </p>
-      </footer>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="header">
+          <div class="header__brand">
+            <img
+              class="header__section-symbol"
+              id="headerSectionSymbol"
+              src=""
+              alt=""
+              aria-hidden="true"
+              hidden
+            />
+            <h1 class="header__title" aria-label="Budget Overview">
+              <img
+                class="header__title-art"
+                id="headerTitleArt"
+                src="assets/branding/budget-overview-title.png?v=budget-overview-title-v1"
+                alt=""
+                aria-hidden="true"
+              />
+            </h1>
+          </div>
+        </header>
+
+        <main class="main">
+          <section class="view-panel is-active" data-view="overview" aria-label="Overview">
+            <div class="overview-toolbar" aria-label="Overview controls">
+              <details class="overview-settings">
+                <summary aria-label="Budget period settings" title="Budget period settings">
+                  <img src="assets/icons/nav-settings.svg" alt="" aria-hidden="true" />
+                </summary>
+                <div class="overview-settings__panel">
+                  <label class="period-toggle" title="Budget period">
+                    <span>Budget period</span>
+                    <select id="period" aria-label="Budget period">
+                      <option value="monthly" selected>Monthly</option>
+                      <option value="biweekly">Bi-weekly</option>
+                      <option value="weekly">Weekly</option>
+                    </select>
+                  </label>
+                </div>
+              </details>
+            </div>
+
+            <!-- Combined summary -->
+            <section class="panel summary" aria-labelledby="summary-heading">
+              <h2 id="summary-heading" class="visually-hidden">Budget summary</h2>
+              <div class="summary__hero">
+                <article class="stat-card stat-card--income">
+                  <span class="stat-card__label">Combined income</span>
+                  <span class="stat-card__value" id="combinedIncome">$0</span>
+                  <img
+                    class="stat-card__art stat-card__art--income"
+                    src="assets/illustrations/income-money-stack.png?v=money-stack-v1"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                </article>
+                <article class="stat-card stat-card--spent">
+                  <span class="stat-card__label">Total allocated</span>
+                  <span class="stat-card__value" id="totalAllocated">$0</span>
+                  <img
+                    class="stat-card__art stat-card__art--allocated"
+                    src="assets/illustrations/allocated-wallet.png?v=wallet-v1"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                </article>
+                <article class="stat-card stat-card--disposable">
+                  <span class="stat-card__label">Disposable left</span>
+                  <span class="stat-card__value" id="disposableIncome">$0</span>
+                  <span class="stat-card__hint" id="disposableHint">Unassigned cash after your budget</span>
+                  <img
+                    class="stat-card__art stat-card__art--disposable"
+                    src="assets/illustrations/disposable-money-bag.png?v=money-bag-v1"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                </article>
+              </div>
+            </section>
+
+            <div class="overview-layout">
+              <div class="overview-layout__main">
+                <!-- 50/30/20 -->
+                <section class="panel rule502030" aria-labelledby="rule-heading">
+                  <div class="panel__head">
+                    <h2 id="rule-heading">50 / 30 / 20 rule</h2>
+                    <p class="panel__sub">
+                      <strong>50%</strong> needs · <strong>30%</strong> wants · <strong>20%</strong> savings — compared to your combined income.
+                    </p>
+                  </div>
+                  <div class="rule__layout">
+                    <div class="rule__chart-wrap">
+                      <div class="donut" id="donutChart" role="img" aria-label="Budget allocation chart"></div>
+                      <ul class="donut-legend" id="donutLegend"></ul>
+                    </div>
+                    <div class="rule__bars" id="ruleBars"></div>
+                  </div>
+                </section>
+
+                <section class="panel overview-expenses" aria-labelledby="overview-expenses-heading">
+                  <div class="panel__head">
+                    <h2 id="overview-expenses-heading">Expense overview</h2>
+                    <p class="panel__sub">A display-only rollup of needs, wants, savings, and assigned goals.</p>
+                  </div>
+                  <div class="overview-grid" id="overviewExpenseGrid"></div>
+                </section>
+              </div>
+
+              <aside class="overview-layout__rail" aria-label="Goals overview">
+                <div class="overview-goals-art" aria-hidden="true">
+                  <img src="assets/illustrations/goals-cash-coins-cutout.png?v=transparent-goals-art-v1" alt="" />
+                </div>
+                <section class="panel overview-goals-card" aria-labelledby="overview-goals-heading">
+                  <div class="overview-goals-card__head">
+                    <div class="overview-goals-card__title">
+                      <span class="overview-goals-card__star" aria-hidden="true">☆</span>
+                      <h2 id="overview-goals-heading">Goals &amp; Dreams</h2>
+                    </div>
+                    <button type="button" class="btn overview-goals-card__add" id="openGoalsFromOverview" aria-label="Open Goals section" title="Open Goals section">+</button>
+                  </div>
+                  <div class="overview-goals-card__list" id="overviewGoalsList"></div>
+                  <div class="overview-goals-card__mountains" aria-hidden="true">
+                    <img src="assets/illustrations/goals-dreams-artwork.png?v=goals-art-v1" alt="" />
+                  </div>
+                </section>
+              </aside>
+            </div>
+          </section>
+
+          <section class="view-panel" data-view="income" aria-label="Income" hidden>
+            <!-- Partner income -->
+            <section class="panel partners">
+              <aside class="income-pro-tip" aria-label="Income pro tip">
+                <img class="income-pro-tip__icon" src="assets/icons/icon-set/light-bulb.png?v=light-bulb-v1" alt="" aria-hidden="true" />
+                <p class="income-pro-tip__copy">
+                  <strong>Pro tip:</strong> Include all sources of income—regular pay, side hustles, freelance work, and more.
+                </p>
+                <img
+                  class="income-pro-tip__art"
+                  src="assets/illustrations/income-pro-tip-art.png?v=income-pro-tip-v1"
+                  alt=""
+                  aria-hidden="true"
+                />
+              </aside>
+              <div class="partners__grid" id="partnersGrid"></div>
+            </section>
+          </section>
+
+          <section class="view-panel" data-view="expenses" aria-label="Expenses" hidden>
+            <!-- Expenses -->
+            <section class="panel expenses expenses-page">
+              <header class="expenses-page__hero">
+                <aside class="expenses-summary" aria-label="Expense summary">
+                  <span
+                    class="expenses-summary__chart"
+                    id="expensesCategoryChart"
+                    role="img"
+                    aria-label="No expense categories entered yet"
+                  ></span>
+                  <span class="expenses-summary__stat">
+                    <span class="expenses-summary__label">Total Budget</span>
+                    <strong class="expenses-summary__value expenses-summary__value--budget" id="expensesTotalBudget">$0</strong>
+                  </span>
+                  <span class="expenses-summary__divider" aria-hidden="true"></span>
+                  <span class="expenses-summary__stat">
+                    <span class="expenses-summary__label">Total Spent</span>
+                    <strong class="expenses-summary__value expenses-summary__value--spent" id="expensesTotalSpent">$0</strong>
+                  </span>
+                </aside>
+              </header>
+              <div class="expenses__grid" id="expensesGrid"></div>
+              <aside class="expenses-pro-tip" aria-label="Expenses pro tip">
+                <img class="expenses-pro-tip__icon" src="assets/icons/icon-set/light-bulb.png?v=light-bulb-v1" alt="" aria-hidden="true" />
+                <p><strong>Pro tip:</strong> Review your expenses monthly and adjust as your goals grow.</p>
+                <img
+                  class="expenses-pro-tip__art"
+                  src="assets/illustrations/expenses-pro-tip-money-fixed.png?v=expenses-tip-art-v1"
+                  alt=""
+                  aria-hidden="true"
+                />
+              </aside>
+            </section>
+          </section>
+
+          <section class="view-panel" data-view="goals" aria-label="Goals" hidden>
+            <!-- Other needs / goals -->
+            <section class="panel misc">
+              <div id="miscList" class="misc__list goals-list"></div>
+              <button type="button" class="btn btn--add" id="addMiscBtn">+ Add goal</button>
+            </section>
+          </section>
+
+        </main>
+      </div>
     </div>
 
     <template id="partnerTemplate">
       <article class="partner-card" data-partner-id="">
         <header class="partner-card__head">
-          <input
-            type="text"
-            class="partner-card__name"
-            aria-label="Partner name"
-            maxlength="24"
-          />
+          <div class="partner-card__identity">
+            <span class="partner-card__avatar" aria-hidden="true">
+              <span class="partner-card__avatar-eye partner-card__avatar-eye--left"></span>
+              <span class="partner-card__avatar-eye partner-card__avatar-eye--right"></span>
+              <span class="partner-card__avatar-cheek partner-card__avatar-cheek--left"></span>
+              <span class="partner-card__avatar-cheek partner-card__avatar-cheek--right"></span>
+              <span class="partner-card__avatar-smile"></span>
+            </span>
+            <input
+              type="text"
+              class="partner-card__name"
+              aria-label="Partner name"
+              maxlength="24"
+            />
+          </div>
           <span class="partner-card__total" data-total></span>
         </header>
         <ul class="line-items" data-items></ul>
@@ -135,6 +274,9 @@
 
     <template id="lineItemTemplate">
       <li class="line-item">
+        <span class="line-item__income-icon-wrap" aria-hidden="true">
+          <img class="line-item__income-icon" src="assets/icons/icon-set-2/salary.png" alt="" />
+        </span>
         <input type="text" class="line-item__label" placeholder="e.g. Salary" aria-label="Description" />
         <div class="line-item__amount-wrap">
           <span class="line-item__currency">$</span>
@@ -153,6 +295,12 @@
 
     <template id="expenseLineItemTemplate">
       <li class="line-item line-item--expense">
+        <div class="line-item__expense-icon-wrap">
+          <button type="button" class="line-item__expense-icon-button" aria-label="Choose expense icon" title="Choose icon">
+            <img class="line-item__expense-icon" data-expense-icon src="assets/icons/icon-set-2/financial-goals.png" alt="" aria-hidden="true" />
+          </button>
+          <div class="expense-icon-menu" data-expense-icon-menu hidden></div>
+        </div>
         <input type="text" class="line-item__label" placeholder="e.g. Rent" aria-label="Description" />
         <select class="line-item__paid-by" aria-label="Paid by">
           <option value="his">His</option>
@@ -177,24 +325,31 @@
     <template id="categoryTemplate">
       <div class="expense-category" data-category="">
         <header class="expense-category__head">
-          <h3 class="expense-category__title"></h3>
-          <div class="expense-category__meta">
-            <span class="expense-category__target" data-target></span>
-            <span class="expense-category__actual" data-actual></span>
+          <span class="expense-category__icon" aria-hidden="true">
+            <span data-category-icon></span>
+          </span>
+          <div class="expense-category__body">
+            <div class="expense-category__top">
+              <h3 class="expense-category__title"></h3>
+              <div class="expense-category__meta">
+                <span class="expense-category__target" data-target></span>
+                <span class="expense-category__actual" data-actual></span>
+              </div>
+            </div>
+            <p class="expense-category__split" data-split hidden></p>
+            <div class="expense-category__progress">
+              <div class="progress-bar">
+                <div class="progress-bar__fill" data-fill></div>
+                <div class="progress-bar__target" data-target-line style="left: 100%"></div>
+              </div>
+            </div>
           </div>
-          <p class="expense-category__split" data-split hidden></p>
         </header>
-        <div class="expense-category__progress">
-          <div class="progress-bar">
-            <div class="progress-bar__fill" data-fill></div>
-            <div class="progress-bar__target" data-target-line style="left: 100%"></div>
-          </div>
-        </div>
         <ul class="line-items" data-items></ul>
         <button type="button" class="btn btn--add btn--sm">+ Add expense</button>
       </div>
     </template>
 
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/app.js?v=overview-period-gear-v1"></script>
   </body>
 </html>

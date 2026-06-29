@@ -1,0 +1,34 @@
+/* Together Budget redesign palette */
+:root {
+  /* CSS HEX */
+  --spring-green: #5efc8dff;
+  --soft-cyan: #8ef9f3ff;
+  --jet-black: #292f36ff;
+  --pastel-petal: #ffcae9ff;
+  --amethyst: #9b489bff;
+
+  /* CSS HSL */
+  --spring-green-hsl: hsla(138, 96%, 68%, 1);
+  --soft-cyan-hsl: hsla(177, 90%, 77%, 1);
+  --jet-black-hsl: hsla(212, 14%, 19%, 1);
+  --pastel-petal-hsl: hsla(325, 100%, 90%, 1);
+  --amethyst-hsl: hsla(300, 37%, 45%, 1);
+
+  /* CSS RGB */
+  --spring-green-rgb: rgba(94, 252, 141, 1);
+  --soft-cyan-rgb: rgba(142, 249, 243, 1);
+  --jet-black-rgb: rgba(41, 47, 54, 1);
+  --pastel-petal-rgb: rgba(255, 202, 233, 1);
+  --amethyst-rgb: rgba(155, 72, 155, 1);
+
+  /* CSS Gradients */
+  --gradient-top: linear-gradient(0deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-right: linear-gradient(90deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-bottom: linear-gradient(180deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-left: linear-gradient(270deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-top-right: linear-gradient(45deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-bottom-right: linear-gradient(135deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-top-left: linear-gradient(225deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-bottom-left: linear-gradient(315deg, #5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+  --gradient-radial: radial-gradient(#5efc8dff, #8ef9f3ff, #292f36ff, #ffcae9ff, #9b489bff);
+}

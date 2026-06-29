@@ -120,12 +120,14 @@
     {
       "id": "sample-misc-1",
       "label": "Car maintenance sinking fund",
-      "amount": 150
+      "amount": 150,
+      "category": "needs"
     },
     {
       "id": "sample-misc-2",
       "label": "Gifts & holidays",
-      "amount": 100
+      "amount": 100,
+      "category": "wants"
     }
   ],
   "period": "monthly"
