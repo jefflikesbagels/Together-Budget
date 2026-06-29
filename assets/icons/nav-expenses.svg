@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="title">
+  <title>Expenses</title>
+  <defs>
+    <filter id="glow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="1.05" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g fill="none" stroke="#ffd38f" stroke-width="2.45" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M4.4 6.6h3.1l2.4 13.1h13.8l3.5-8.8H10.3"/>
+    <path d="M11.1 24.8h14"/>
+    <circle cx="12.5" cy="27.2" r="1.9"/>
+    <circle cx="23.6" cy="27.2" r="1.9"/>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+{
+  "name": "together-budget-remotion-demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "render": "remotion render src/index.ts DemoVideo ../together-budget-demo.mp4 --codec=h264 --pixel-format=yuv420p",
+    "still": "remotion still src/index.ts DemoVideo ../together-budget-demo-still.png --frame=180"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.374",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "remotion": "^4.0.374"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

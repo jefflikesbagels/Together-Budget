@@ -7,6 +7,8 @@
  * @property {string} id
  * @property {string} label
  * @property {number} amount
+ * @property {string} [iconKey]
+ * @property {boolean} [iconCustom]
  */
 
 /**
@@ -14,7 +16,7 @@
  */
 
 /**
- * @typedef {LineItem & { category: ExpenseCategory }} MiscLineItem
+ * @typedef {LineItem & { category: ExpenseCategory, saved?: number, target?: number }} MiscLineItem
  */
 
 /**
@@ -37,7 +39,7 @@ export const RULE = {
 };
 
 export const CATEGORY_META = {
-  needs: { title: 'Needs (50%)', hint: 'Rent, utilities, groceries, insurance, minimum debt' },
+  needs: { title: 'Needs (50%)', hint: 'Rent, electric, water, internet, groceries, insurance, minimum debt' },
   wants: { title: 'Wants (30%)', hint: 'Dining out, subscriptions, hobbies, travel' },
   savings: { title: 'Savings (20%)', hint: 'Emergency fund, retirement, extra debt payoff' },
 };
@@ -57,13 +59,13 @@ export function createLineItem(label = '', amount = 0) {
 }
 
 /** @param {ExpenseCategory} [category] */
-export function createMiscItem(label = '', amount = 0, category = 'needs') {
-  return { id: uid(), label, amount, category };
+export function createMiscItem(label = '', amount = 0, category = 'needs', target = 0, saved = 0, iconKey = '') {
+  return { id: uid(), label, amount, category, target, saved, iconKey, iconCustom: false };
 }
 
 /** @param {ExpensePaidBy} [paidBy] */
-export function createExpenseItem(label = '', amount = 0, paidBy = 'combined') {
-  return { id: uid(), label, amount, paidBy };
+export function createExpenseItem(label = '', amount = 0, paidBy = 'combined', iconKey = '') {
+  return { id: uid(), label, amount, paidBy, iconKey, iconCustom: false };
 }
 
 /** @param {LineItem[]} items */
@@ -79,6 +81,9 @@ export function normalizeExpenseItems(items) {
 export function normalizeMiscItems(items) {
   return items.map((i) => ({
     ...i,
+    amount: Number(i.amount) || 0,
+    saved: Number(i.saved ?? i.amount) || 0,
+    target: Number(i.target) || 0,
     category:
       i.category === 'needs' || i.category === 'wants' || i.category === 'savings'
         ? i.category
@@ -112,7 +117,9 @@ export function defaultState() {
     ],
     needs: [
       createExpenseItem('Rent / mortgage', 0, 'combined'),
-      createExpenseItem('Utilities', 0, 'combined'),
+      createExpenseItem('Electric', 0, 'combined'),
+      createExpenseItem('Water', 0, 'combined'),
+      createExpenseItem('Internet', 0, 'combined'),
       createExpenseItem('Groceries', 0, 'combined'),
       createExpenseItem('Insurance', 0, 'combined'),
     ],
@@ -124,7 +131,11 @@ export function defaultState() {
       createExpenseItem('Emergency fund', 0, 'combined'),
       createExpenseItem('Retirement', 0, 'combined'),
     ],
-    misc: [createMiscItem('Car maintenance fund', 0, 'needs')],
+    misc: [
+      createMiscItem('Vacation', 200, 'wants', 3000, 1200),
+      createMiscItem('New Car', 350, 'savings', 10000, 4500),
+      createMiscItem('House Fund', 750, 'savings', 50000, 15000),
+    ],
     period: 'monthly',
   };
 }
